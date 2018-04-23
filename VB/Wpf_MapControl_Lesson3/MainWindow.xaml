@@ -1,0 +1,79 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:dxm="http://schemas.devexpress.com/winfx/2008/xaml/map" 
+        x:Class="Wpf_MapControl_Lesson3.MainWindow"
+        Title="MainWindow" Height="350" Width="525">
+
+    <Window.Resources>
+        <XmlDataProvider x:Key="dataProvider" Source="sochi2014.xml" XPath="/NewDataSet"/>
+    </Window.Resources>
+
+    <Grid>
+        <dxm:MapControl CenterPoint="40,10" ZoomLevel="2" ToolTipEnabled="True">
+            <!--region #Legends-->
+            <dxm:MapControl.Legends>
+                <dxm:SizeLegend Header="Medal Count" Layer="{Binding ElementName=vectorLayer}"/>
+                <dxm:ColorListLegend Header="Medal Class" Layer="{Binding ElementName=vectorLayer}"/>
+            </dxm:MapControl.Legends>
+            <!--endregion #Legends-->
+            <dxm:ImageTilesLayer>
+                <dxm:ImageTilesLayer.DataProvider>
+                    <dxm:BingMapDataProvider BingKey="YOUR BING KEY"/>
+                </dxm:ImageTilesLayer.DataProvider>
+            </dxm:ImageTilesLayer>
+            <dxm:VectorLayer x:Name="vectorLayer" 
+                             ToolTipPattern="{}{Name} &#13;&#10;Gold: %V0%&#13;&#10;Silver: %V1%&#13;&#10;Bronze: %V2%&#13;&#10;Total: %V%">
+                <!--region #PieGeneration-->
+                <dxm:VectorLayer.Data>
+                    <dxm:PieChartDataAdapter DataSource="{Binding Source={StaticResource dataProvider}, XPath=Table1}" 
+                                             ItemIdDataMember="Country" ItemMinSize="20" ItemMaxSize="60">
+                        <dxm:PieChartDataAdapter.MeasureRules>
+                            <dxm:MeasureRules RangeStops="1 10 20 30 40"/>
+                        </dxm:PieChartDataAdapter.MeasureRules>
+                        <dxm:PieChartDataAdapter.AttributeMappings>
+                            <dxm:MapItemAttributeMapping Member="Name" Name="Name"/>
+                        </dxm:PieChartDataAdapter.AttributeMappings>
+                        <dxm:PieChartDataAdapter.Mappings>
+                            <dxm:MapPieMappingInfo Latitude="CapitalLat" Longitude="CapitalLon" 
+                                                   SegmentId="MedalClass" SegmentValue="Quantity"/>
+                        </dxm:PieChartDataAdapter.Mappings>
+                    </dxm:PieChartDataAdapter>
+                </dxm:VectorLayer.Data>
+                <!--endregion #PieGeneration-->
+                <!--region #ColorizerAdding-->
+                <dxm:VectorLayer.Colorizer>
+                    <dxm:KeyColorColorizer>
+                        <dxm:KeyColorColorizer.ItemKeyProvider>
+                            <dxm:IdItemKeyProvider/>
+                        </dxm:KeyColorColorizer.ItemKeyProvider>
+                        <dxm:KeyColorColorizer.Colors>
+                            <Color>#FFFFCF62</Color>
+                            <Color>#FFA9B5BC</Color>
+                            <Color>#FFE99876</Color>
+                        </dxm:KeyColorColorizer.Colors>
+                        <dxm:KeyColorColorizer.Keys>
+                            <dxm:ColorizerKeyItem Name="Gold">
+                                <dxm:ColorizerKeyItem.Key>
+                                    <sys:Int32>1</sys:Int32>
+                                </dxm:ColorizerKeyItem.Key>
+                            </dxm:ColorizerKeyItem>
+                            <dxm:ColorizerKeyItem Name="Silver">
+                                <dxm:ColorizerKeyItem.Key>
+                                    <sys:Int32>2</sys:Int32>
+                                </dxm:ColorizerKeyItem.Key>
+                            </dxm:ColorizerKeyItem>
+                            <dxm:ColorizerKeyItem Name="Bronze">
+                                <dxm:ColorizerKeyItem.Key>
+                                    <sys:Int32>3</sys:Int32>
+                                </dxm:ColorizerKeyItem.Key>
+                            </dxm:ColorizerKeyItem>
+                        </dxm:KeyColorColorizer.Keys>
+                    </dxm:KeyColorColorizer>
+                    <!--endregion #ColorizerAdding-->
+                </dxm:VectorLayer.Colorizer>
+            </dxm:VectorLayer>
+        </dxm:MapControl>
+    </Grid>
+</Window>
