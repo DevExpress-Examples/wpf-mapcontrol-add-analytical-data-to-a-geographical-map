@@ -8,6 +8,8 @@
 
 This example demonstrates how to add analytical data to a geographical map.
 
+![Map](./images/Map.png)
+
 ## Files to Review
 
 * **[MainWindow.xaml](./CS/Wpf_MapControl_Lesson3/MainWindow.xaml) (VB: [MainWindow.xaml](./VB/Wpf_MapControl_Lesson3/MainWindow.xaml))**
